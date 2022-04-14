@@ -1,0 +1,153 @@
+openapi: "3.0.0"
+
+info:
+  description: "Finance reservation system"
+  version: "1.0.0"
+  title: "Finance App"
+
+servers:
+  - url: http://localhost:{port}/{base_path}
+    description: Local development server
+    variables:
+      port:
+        default: "8000"
+      base_path:
+        default: "api/v1"
+
+paths:
+  /health:
+    get:
+      tags:
+        - Health
+      summary: Get server status
+      responses:
+        200:
+          description: Server OK.
+          content:
+            application/json:
+              schema:
+                properties:
+                  appName:
+                    type: string
+                    example: "Finance App"
+                  version:
+                    type: string
+                    example: "1.0.0"
+                  status:
+                    type: string
+                    example: "OK"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Error:
+      properties:
+        code:
+          type: string
+          description: Debug Id
+        name:
+          type: string
+          description: A human-readable error name
+        message:
+          type: string
+          description: A human-readable error message
+        details:
+          oneOf:
+            - type: string
+              description: A more specific human-readable error message
+            - type: object
+              description: A more specific human-readable error message together with some details
+            - type: array
+              description: An array with issues from multiple fields (e.g. input validation)
+
+  responses:
+    400:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            code: ckgjkxvgl000431pp4xlpew2g
+            name: Bad Request
+            message: Your request contains invalid or missing data
+            details:
+              [
+                {
+                  message: '"{fieldName}" must be a valid {fieldType}',
+                  path: ["{pathToField}"],
+                },
+              ]
+    401:
+      description: Not Authenticated
+      content:
+        text/plain:
+          schema:
+            type: string
+            example: "Unauthorized"
+    403:
+      description: Not Authorized / Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            code: ckgjkxvgl000431pp4xlpew2g
+            name: Not Authorized / Forbidden
+            message: Your request cannot be completed due to missing permissions
+    404:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            code: ckgjkxvgl000431pp4xlpew2g
+            name: Not Found
+            message: The requested item was not found
+    422:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            code: ckgjkxvgl000431pp4xlpew2g
+            name: Unprocessable Entity
+            message: Your request was understood but could not be completed due to semantic errors
+    500:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            code: ckgjkxvgl000431pp4xlpew2g
+            name: Internal Server Error
+            message: Operation cannot be completed due to a problem
+  parameters:
+    skip:
+      name: skip
+      in: query
+      description: Number of records to skip (for pagination)
+      schema:
+        type: string
+    limit:
+      name: limit
+      in: query
+      description: Page size (for pagination)
+      schema:
+        type: string
+
+  examples:
+    UserNotFound:
+      value:
+        code: ckgjkxvgl000431pp4xlpew2g
+        name: Not Found
+        message: The requested item was not found
+        details: The requested user does not exist in our database
+      summary: User not found
