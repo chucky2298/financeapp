@@ -21,6 +21,15 @@ export const findAccount = async (name) => {
   return result;
 };
 
+export const findAccountById = async (id) => {
+  const result = await prisma.account.findUnique({
+    where: {
+      id: id,
+    },
+  });
+  return result;
+};
+
 export const deleteAccounts = async ({ query }) => {
   await prisma.account.deleteMany(query);
 };
