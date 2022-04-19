@@ -4,7 +4,7 @@ import { stub } from "sinon";
 import { faker } from "@faker-js/faker";
 import { initServer, server } from "../../../index";
 import * as dal from "../auth/auth.dal";
-import * as accountsDal from "./accounts.dal"
+import * as accountsDal from "./accounts.dal";
 import mailService from "../../config/mail";
 
 Chai.use(ChaiHTTP);
@@ -15,12 +15,12 @@ describe(`Test "Auth" endpoints`, () => {
   const password = "Ran@0m?pass";
   let userToken = null;
   let sendEmailStub = null;
-	const name = "Housing"
+  const name = "Housing";
 
   beforeAll(async () => {
     await initServer();
     await dal.deleteUsers({ query: {} });
-		await accountsDal.deleteAccounts({ query: {} });
+    await accountsDal.deleteAccounts({ query: {} });
     sendEmailStub = stub(mailService, "sendEmail").resolves();
   });
 
@@ -39,7 +39,7 @@ describe(`Test "Auth" endpoints`, () => {
     Chai.expect(response.status).to.equal(204);
   });
 
-	it('Test "PUT /auth/confirmation" (Success test case)', async () => {
+  it('Test "PUT /auth/confirmation" (Success test case)', async () => {
     const user = await dal.findUser(email.toLowerCase());
     confirmationToken = user.confirmationToken;
 
@@ -50,7 +50,7 @@ describe(`Test "Auth" endpoints`, () => {
     Chai.expect(response.status).to.equal(204);
   });
 
-	it('Test "POST /auth/login" (Success test case)', async () => {
+  it('Test "POST /auth/login" (Success test case)', async () => {
     const body = {
       email,
       password,
@@ -106,7 +106,7 @@ describe(`Test "Auth" endpoints`, () => {
 
   afterAll(async () => {
     await dal.deleteUsers({ query: {} });
-		await accountsDal.deleteAccounts({ query: {} });
+    await accountsDal.deleteAccounts({ query: {} });
     sendEmailStub.restore();
   });
 });

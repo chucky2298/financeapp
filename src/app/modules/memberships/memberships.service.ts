@@ -6,7 +6,7 @@ import {
   authorizeWriteRequest,
   checkIfFullyAuthenticated,
 } from "../../utils/authorizations";
-import { NotFound, UnprocessableEntity } from "../../utils/error";
+import { NotAuthorized, NotFound, UnprocessableEntity } from "../../utils/error";
 
 export const readMemberships = async ({ user }) => {
   checkIfFullyAuthenticated(user.isFullyAuthenticated);
@@ -18,6 +18,29 @@ export const readMemberships = async ({ user }) => {
 export const createMembership = async ({ requestBody, user }) => {
   checkIfFullyAuthenticated(user.isFullyAuthenticated);
   validator.validatePostMembershipRequest({ input: requestBody });
+
+	const existingAccount = await accountDal.findAccountById(
+    Number(requestBody.accountId)
+  );
+  if (!existingAccount) {
+    throw new UnprocessableEntity("Account not found");
+  }
+  const existingUser = await userDal.findUserById(Number(requestBody.userId));
+  if (!existingUser) {
+    throw new UnprocessableEntity("User not found");
+  }
+
+	const membershipManager = await dal.findMembership(
+    Number(requestBody.accountId),
+    Number(user._id)
+  );
+  if (membershipManager.length == 0) {
+    throw new NotAuthorized("You are not the manager");
+  } else {
+    if (!membershipManager[0].isManager) {
+      throw new NotAuthorized("You are not the manager");
+    }
+  }
 
   const membership = {
     accountId: requestBody.accountId,
@@ -81,10 +104,10 @@ export const assignManager = async ({ user, userId, accountId }) => {
     Number(user._id)
   );
   if (membershipManager.length == 0) {
-    throw new UnprocessableEntity("You are not the manager");
+    throw new NotAuthorized("You are not the manager");
   } else {
     if (!membershipManager[0].isManager) {
-      throw new UnprocessableEntity("You are not the manager");
+      throw new NotAuthorized("You are not the manager");
     }
   }
 

@@ -45,7 +45,7 @@ router
 
 
 /**
- * Create account.
+ * Create membership.
  * 
  * @openapi
  * 
