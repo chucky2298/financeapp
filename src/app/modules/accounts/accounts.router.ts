@@ -72,7 +72,7 @@ router.route(BASE_ROUTE).get(
  *           content:
  *             application/json:
  *               schema:
- *                 $ref: "#/components/schemas/Account"
+ *                 $ref: "#/components/schemas/User"
  *         400:
  *           $ref: "#/components/responses/400"
  *         401:

@@ -57,3 +57,13 @@ export const findMembership = async (accountId, userId) => {
   });
   return result;
 };
+
+export const findMembershipByToken = async (token) => {
+	console.log(token)
+  const result = await prisma.accountMembership.findMany({
+    where: {
+      confirmationToken: token,
+    },
+  });
+  return result;
+};

@@ -8,6 +8,7 @@ export const findAccounts = async () => {
 };
 
 export const createAccount = async ( content ) => {
+	console.log("Content ==============> ", content);
   const result = await prisma.account.create({ data: content });
   return result;
 };

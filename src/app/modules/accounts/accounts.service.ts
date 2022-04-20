@@ -2,6 +2,8 @@ import * as validator from "./accounts.validator";
 import * as dal from "./accounts.dal";
 import { UnprocessableEntity } from "../../utils/error";
 import { checkIfFullyAuthenticated } from "../../utils/authorizations";
+import Crypto from "crypto";
+
 
 export const readAccounts = async ({ user }) => {
 	console.log("service read accounts", user.isFullyAuthenticated)
@@ -23,6 +25,8 @@ export const createAccount = async ({ requestBody, user }) => {
       create: [
         {
           isManager: true,
+          confirmationToken: Crypto.randomBytes(32).toString("hex"),
+					accepted: true,
           user: {
             connect: {
               id: user._id,

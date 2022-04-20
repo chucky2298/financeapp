@@ -20,6 +20,17 @@ export const postMembership = async (req, res, next) => {
     next(e);
   }
 };
+export const acceptInvitation = async (req, res, next) => {
+  try {
+    const result = await service.acceptInvitation({
+      token: req.query.token,
+      user: req.user,
+    });
+    res.status(201).json(result);
+  } catch (e) {
+    next(e);
+  }
+};
 
 export const getMyMemberships = async (req, res, next) => {
 		try {

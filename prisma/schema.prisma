@@ -43,6 +43,8 @@ model AccountMembership {
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int 
   isManager Boolean
+	accepted Boolean @default(false)
+	confirmationToken String @unique
 
   @@id([accountId, userId])
 }

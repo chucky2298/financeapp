@@ -2,6 +2,7 @@ import * as dal from "./memberships.dal";
 import * as accountDal from "../accounts/accounts.dal";
 import * as userDal from "../users/users.dal";
 import * as validator from "./memberships.validator";
+import Crypto from "crypto";
 import {
   authorizeWriteRequest,
   checkIfFullyAuthenticated,
@@ -45,11 +46,37 @@ export const createMembership = async ({ requestBody, user }) => {
   const membership = {
     accountId: requestBody.accountId,
     userId: requestBody.userId,
-		isManager: false,
+    isManager: false,
+		accepted: false,
+    confirmationToken: Crypto.randomBytes(32).toString("hex"),
   };
+	console.log("CONFIRMATION TOKEN: ", membership.confirmationToken)
   const createdAccount = await dal.createMembership(membership);
   return createdAccount;
 };
+
+export const acceptInvitation = async ({ user, token }) => {
+  checkIfFullyAuthenticated(user.isFullyAuthenticated);
+	const membership = await dal.findMembershipByToken(token);
+	console.log("=================   =================",membership)
+  if (user._id !== membership[0].userId) {
+    throw new NotAuthorized("This user is not allowed");
+  }
+  if (!membership) {
+    throw new UnprocessableEntity("This token is invalid");
+  }
+
+  await dal.updateMembership({
+    query: {
+      accountId: Number(membership[0].accountId),
+      userId: Number(membership[0].userId),
+    },
+    content: {
+      accepted: true,
+    },
+  });
+};
+
 
 export const readMyMemberships = async ({ user }) => {
   checkIfFullyAuthenticated(user.isFullyAuthenticated);

@@ -45,7 +45,7 @@ router
 
 
 /**
- * Create membership.
+ * Invite member.
  * 
  * @openapi
  * 
@@ -56,8 +56,8 @@ router
  *         - bearerAuth: []
  *       tags:
  *         - Memberships
- *       summary: Create membership
- *       description: Adds a new membership.
+ *       summary: Invite member
+ *       description: Invites a member to an account.
  *       requestBody:
  *         content:
  *           application/json:
@@ -106,6 +106,57 @@ router
   .post(
     Passport.authenticate("jwt", { session: false }),
     controller.postMembership
+  );
+
+	/**
+ * Accept invitation.
+ * 
+ * @openapi
+ * 
+ * paths:
+ *   /memberships/accept_invitation/confirmation:
+ *     patch:
+ *       security:
+ *         - bearerAuth: []
+ *       tags:
+ *         - Memberships
+ *       summary: Accept invitation
+ *       description: Sets accepted to boolean to true
+ *       parameters:
+ *         - name: token
+ *           in: query
+ *           description: User confirmation token
+ *           required: true
+ *           schema:
+ *             type: string
+ *       responses:
+ *         204:
+ *           description: Invitation accepted successfully.
+ *         400:
+ *           $ref: "#/components/responses/400"
+ *         404:
+ *           description: Not Found
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: "#/components/schemas/Error"
+ *               examples:
+ *                 userNotFoundOrConfirmed:
+ *                   value:
+ *                     code: ckgjkxvgl000431pp4xlpew2g
+ *                     name: Not Found
+ *                     message: The requested item was not found
+ *                     details: The requested user does not exist, or the account is already confirmed
+ *                   summary: User not found or account confirmed
+ *         500:
+ *           $ref: "#/components/responses/500"
+ */
+
+router
+  .route(`${BASE_ROUTE}/accept_invitation/confirmation`)
+  .patch(
+    Passport.authenticate("jwt", { session: false }),
+    controller.acceptInvitation
   );
 
 /**
