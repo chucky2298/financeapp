@@ -81,7 +81,7 @@ router.route(BASE_ROUTE).get(
  *           $ref: "#/components/responses/500"
  */
 
-router.route("/account_incomes/id").get(
+router.route("/account_incomes/:id").get(
   Passport.authenticate('jwt', { session: false }),
   controller.getIncomesByAccount,
 );
@@ -201,7 +201,7 @@ router.route(`${BASE_ROUTE}`).post(
  *           $ref: "#/components/responses/500"
  */
 
-router.route(`${BASE_ROUTE}/id`).patch(
+router.route(`${BASE_ROUTE}/:id`).patch(
   Passport.authenticate('jwt', { session: false }),
   controller.updateIncome,
 );
@@ -246,7 +246,7 @@ router.route(`${BASE_ROUTE}/id`).patch(
  *           $ref: "#/components/responses/500"
  */
 
-router.route(`${BASE_ROUTE}/id`).delete(
+router.route(`${BASE_ROUTE}/:id`).delete(
   Passport.authenticate('jwt', { session: false }),
   controller.deleteIncome,
 );

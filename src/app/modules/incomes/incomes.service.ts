@@ -1,6 +1,7 @@
 import * as validator from "./incomes.validator";
 import * as dal from "./incomes.dal";
 import * as membershipDal from "../memberships/memberships.dal";
+import * as accountDal from "../accounts/accounts.dal";
 import { checkIfFullyAuthenticated } from "../../utils/authorizations";
 import {
   NotAuthorized,
@@ -17,6 +18,14 @@ export const readIncomes = async ({ user }) => {
 export const createIncome = async ({ requestBody, user }) => {
   checkIfFullyAuthenticated(user.isFullyAuthenticated);
   validator.validatePostIncomeRequest({ input: requestBody });
+
+	const existingAccount = await accountDal.findAccountById(
+    Number(requestBody.accountId)
+  );
+
+  if (!existingAccount) {
+    throw new NotFound("Account does not exist");
+  }
 
   const membershipManager = await membershipDal.findMembership(
     Number(requestBody.accountId),
@@ -78,6 +87,13 @@ export const updateIncome = async ({ user, requestBody, incomeId }) => {
 
 export const readAccountIncomes = async ({ user, accountId }) => {
   checkIfFullyAuthenticated(user.isFullyAuthenticated);
+	console.log("incomes service ============ ", accountId)
+	const existingAccount = await accountDal.findAccountById(Number(accountId));
+
+  if (!existingAccount) {
+    throw new NotFound("Account does not exist");
+  }
+
   const incomes = await dal.findIncomesByAccount(Number(accountId));
   return incomes;
 };

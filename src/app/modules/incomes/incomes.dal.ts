@@ -53,3 +53,7 @@ export const updateIncome = async ({ query, content }) => {
 export const deleteIncome = async ({ query }) => {
   await prisma.income.delete(query);
 };
+
+export const deleteIncomes = async ({ query }) => {
+  await prisma.income.deleteMany(query);
+};
