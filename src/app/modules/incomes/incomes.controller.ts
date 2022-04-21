@@ -27,7 +27,7 @@ export const updateIncome = async (req, res, next) => {
     await service.updateIncome({
       requestBody: req.body,
       user: req.user,
-			incomeId: req.params.id
+			incomeId: req.query.id
     });
     res.sendStatus(204);
   } catch (e) {
@@ -38,7 +38,7 @@ export const updateIncome = async (req, res, next) => {
 export const deleteIncome = async (req, res, next) => {
   try {
     await service.deleteIncome({
-      incomeId: req.params.id,
+      incomeId: req.query.id,
       user: req.user,
     });
     res.sendStatus(204);
@@ -50,7 +50,7 @@ export const deleteIncome = async (req, res, next) => {
 export const getIncomesByAccount = async (req, res, next) => {
   try {
     const result = await service.readAccountIncomes({
-      accountId: req.params.id,
+      accountId: req.query.id,
       user: req.user,
     });
     res.status(201).json(result);

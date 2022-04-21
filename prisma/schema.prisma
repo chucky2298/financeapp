@@ -36,6 +36,7 @@ model Account {
   name   String   @unique
 	users AccountMembership[]
 	incomes Income[]
+	budgets Budget[]
 }
 
 model AccountMembership {
@@ -51,6 +52,15 @@ model AccountMembership {
 }
 
 model Income {
+  id       Int  @id @default(autoincrement())
+  account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId Int
+	month Int
+	year Int
+	value Float
+}
+
+model Budget {
   id       Int  @id @default(autoincrement())
   account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
   accountId Int
