@@ -36,7 +36,7 @@ export const registerUser = async ({ requestBody }) => {
     lastName: requestBody.lastName,
     confirmationToken: Crypto.randomBytes(32).toString("hex"),
     confirmationLevel: confirmationLevels.PENDING,
-    isAdmin: true,
+    isAdmin: false,
     twoFactorAuth: { active: false, secret: null },
   };
   const createdUser = await dal.createUser({ content: newUserBody });

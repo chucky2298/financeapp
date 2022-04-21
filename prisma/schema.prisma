@@ -37,6 +37,7 @@ model Account {
 	users AccountMembership[]
 	incomes Income[]
 	budgets Budget[]
+	expenses Expense[]
 }
 
 model AccountMembership {
@@ -67,4 +68,24 @@ model Budget {
 	month Int
 	year Int
 	value Float
+}
+
+model Expense {
+  id       Int  @id @default(autoincrement())
+  account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId Int
+	month Int
+	year Int
+	value Float
+	description String?
+	category Category
+}
+
+enum Category {
+  HOUSE
+  TRANSPORT
+	PERSONAL
+	FOOD
+	ENTERTAINMENT
+	HEALTH
 }
