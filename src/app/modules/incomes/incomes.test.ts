@@ -142,7 +142,7 @@ describe(`Test "Income" endpoints`, () => {
 
   it('Test "GET /account_incomes/id": Success case', async () => {
     const response = await Chai.request(server)
-      .get(`/api/v1/account_incomes/${accountId}`)
+      .get(`/api/v1/account_incomes/id?id=${accountId}`)
       .set("authorization", userToken);
 
     Chai.expect(response.status).to.equal(201);
@@ -150,7 +150,7 @@ describe(`Test "Income" endpoints`, () => {
 
   it('Test "GET /account_incomes": Fail case, account not found', async () => {
     const response = await Chai.request(server)
-      .get(`/api/v1/account_incomes/${fakeAccountId}`)
+      .get(`/api/v1/account_incomes/id?id=${fakeAccountId}`)
       .set("authorization", userToken);
 
     Chai.expect(response.status).to.equal(404);
@@ -231,7 +231,7 @@ describe(`Test "Income" endpoints`, () => {
       value: 300,
     };
     const response = await Chai.request(server)
-      .patch(`/api/v1/incomes/${incomeId}`)
+      .patch(`/api/v1/incomes/id?id=${incomeId}`)
       .set("authorization", userToken)
       .send(body);
 
@@ -243,7 +243,7 @@ describe(`Test "Income" endpoints`, () => {
       value: 200,
     };
     const response = await Chai.request(server)
-      .patch("/api/v1/incomes/444444")
+      .patch("/api/v1/incomes/id?id=444444")
       .set("authorization", userToken)
       .send(body);
 
@@ -255,7 +255,7 @@ describe(`Test "Income" endpoints`, () => {
       value: 300,
     };
     const response = await Chai.request(server)
-      .patch(`/api/v1/incomes/${incomeId}`)
+      .patch(`/api/v1/incomes/id?id=${incomeId}`)
       .set("authorization", userTokenTwo)
       .send(body);
 
