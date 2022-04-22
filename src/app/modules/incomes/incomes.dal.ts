@@ -23,6 +23,11 @@ export const findIncome = async ({id}) => {
 
 export const findIncomesByAccount = async (id) => {
   const result = await prisma.income.findMany({
+    orderBy: [
+      {
+        value: "desc",
+      },
+    ],
     where: {
       accountId: id,
     },
@@ -35,6 +40,21 @@ export const findIncomesByDate = async ({ accountId, year, month }) => {
     where: {
       accountId: accountId,
       month: month,
+      year: year,
+    },
+  });
+  return result;
+};
+
+export const findIncomesByYear = async ({ accountId, year }) => {
+  const result = await prisma.income.findMany({
+    orderBy: [
+      {
+        value: "desc",
+      },
+    ],
+    where: {
+      accountId: accountId,
       year: year,
     },
   });

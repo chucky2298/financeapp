@@ -23,6 +23,11 @@ export const findBudget = async ({id}) => {
 
 export const findBudgetsByAccount = async (id) => {
   const result = await prisma.budget.findMany({
+    orderBy: [
+      {
+        value: "desc",
+      },
+    ],
     where: {
       accountId: id,
     },
@@ -35,6 +40,21 @@ export const findBudgetsByDate = async ({ accountId, year, month }) => {
     where: {
       accountId: accountId,
       month: month,
+      year: year,
+    },
+  });
+  return result;
+};
+
+export const findBudgetsByYear = async ({ accountId, year }) => {
+  const result = await prisma.budget.findMany({
+    orderBy: [
+      {
+        value: "desc",
+      },
+    ],
+    where: {
+      accountId: accountId,
       year: year,
     },
   });

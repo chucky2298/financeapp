@@ -41,6 +41,44 @@ export const findExpensesByDate = async ({ accountId, year, month }) => {
   return result;
 };
 
+export const findExpensesByDateAndCategory = async ({
+  accountId,
+  year,
+  month,
+  category,
+}) => {
+  const result = await prisma.expense.findMany({
+    where: {
+      accountId: accountId,
+      month: month,
+      year: year,
+      category: category,
+    },
+  });
+  return result;
+};
+
+export const findExpensesByYear = async ({ accountId, year }) => {
+  const result = await prisma.expense.findMany({
+    where: {
+      accountId: accountId,
+      year: year,
+    },
+  });
+  return result;
+};
+
+export const findExpensesByYearAndCategory = async ({ accountId, year, category }) => {
+  const result = await prisma.expense.findMany({
+    where: {
+      accountId: accountId,
+      year: year,
+      category: category,
+    },
+  });
+  return result;
+};
+
 export const updateExpense = async ({ query, content }) => {
 	console.log("query: ", content)
   const result = await prisma.expense.update({
